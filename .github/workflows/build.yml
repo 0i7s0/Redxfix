@@ -7,8 +7,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+      - name: Fetch repository manually
+        run: |
+          git init
+          git remote add origin https://github.com/${{ github.repository }}
+          git fetch origin ${{ github.sha }}
+          git reset --hard ${{ github.sha }}
 
       - name: Install dependencies
         run: |
@@ -26,4 +30,3 @@ jobs:
         with:
           name: Redxfix-APK
           path: bin/*.apk
-          
