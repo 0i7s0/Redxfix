@@ -6,15 +6,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: kivy/buildozer-deps:latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev libssl-dev
+          pip3 install --user --upgrade buildozer
 
       - name: Build with Buildozer
         run: |
-          pip install --upgrade buildozer
+          export PATH=$PATH:~/.local/bin/
           buildozer android debug
 
       - name: Upload APK
